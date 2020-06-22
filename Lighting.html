@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Final Project</title>
+
+    <script type="text/javascript" src="initShaders2.js"></script>
+    <script type="text/javascript" src="MV.js"></script>
+    <script type="text/javascript" src="final.js"></script>
+</head>
+<body>
+<div>Non-Photorealistic rendering - Sketchy <br> This effect is accomplished by rendering in two passes: once to get a texture with the depth and
+normals, and then once using those two textures to find edges and apply jitter to the edges and the coloring inside giving the "sketchy" effect</div><br>
+<div> Select mesh file:
+    <input type = "file" id="fileInput">
+</div><br>
+<div id = "label">Final Project</div><br>
+<canvas id="gl-canvas" width="512" height="512">
+    Sorry; your web browser doesn't support HTML5's canvas element.
+</canvas>
+</body>
+</html>
