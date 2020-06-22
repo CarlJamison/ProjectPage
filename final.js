@@ -30,22 +30,21 @@ window.onload = function init() {
     if (!gl) {
         alert("WebGL isn't available");
     }
-
-    var fileInput = document.getElementById("fileInput");
-    fileInput.addEventListener('change', function(e){
-        var file = fileInput.files[0];
-        var textType = /text.*/;
-        if(file.type.match(textType)){
-
-            var reader = new FileReader();
-            reader.onload = function(e){
-                createMesh(reader.result); //ok, we have our data, so parse it
-            };
-            reader.readAsText(file);
-        }else{
-            console.log("File not supported: " + file.type + ".");
+	
+	var file = new File([], 'EnterpriseA2.txt');
+	var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", 'EnterpriseA2.txt', false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                createMesh(rawFile.responseText);
+            }
         }
-    });
+    }
+    rawFile.send(null);
 
     gl.clearColor(0.3, 0.2, 0.2, 1.0);
     gl.enable(gl.DEPTH_TEST);
@@ -57,7 +56,7 @@ window.onload = function init() {
     texture_program = (initShaders(gl, "vshader-gbuffer.glsl", "fshader-gbuffer.glsl"));
 
     //Generate some initial geometry
-    generateSphere(60);
+    //generateSphere(60);
 
     //Get our Noise Textures
 

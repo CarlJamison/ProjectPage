@@ -1,37 +1,20 @@
-## Welcome to GitHub Pages
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Final Project</title>
 
-You can use the [editor on GitHub](https://github.com/CarlJamison/ProjectPage/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+    <script type="text/javascript" src="initShaders2.js"></script>
+    <script type="text/javascript" src="MV.js"></script>
+    <script type="text/javascript" src="final.js"></script>
+</head>
+<body>
+<div>Non-Photorealistic rendering - Sketchy <br> This effect is accomplished by rendering in two passes: once to get a texture with the depth and
+normals, and then once using those two textures to find edges and apply jitter to the edges and the coloring inside giving the "sketchy" effect</div><br>
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/CarlJamison/ProjectPage/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+<div id = "label">Final Project</div><br>
+<canvas id="gl-canvas" width="512" height="512">
+    Sorry; your web browser doesn't support HTML5's canvas element.
+</canvas>
+</body>
+</html>
