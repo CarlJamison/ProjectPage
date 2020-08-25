@@ -1,20 +1,160 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Final Project</title>
+<html>
+<title>Covid Stuff</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
+.mySlides {display: none}
+</style>
+<body class="w3-content w3-border-left w3-border-right" onload="loadAirports()">
 
-    <script type="text/javascript" src="initShaders2.js"></script>
-    <script type="text/javascript" src="MV.js"></script>
-    <script type="text/javascript" src="final.js"></script>
-</head>
-<body>
-<div>Non-Photorealistic rendering - Sketchy <br> This effect is accomplished by rendering in two passes: once to get a texture with the depth and
-normals, and then once using those two textures to find edges and apply jitter to the edges and the coloring inside giving the "sketchy" effect</div><br>
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-light-grey w3-collapse w3-top" style="z-index:3;width:260px" id="mySidebar">
+  <div class="w3-container w3-display-container w3-padding-16">
+    <i onclick="w3_close()" class="fa fa-remove w3-hide-large w3-button w3-transparent w3-display-topright"></i>
+    <h3>Airline</h3>
+    <h3>Covid Data</h3>
+    <hr>
+    <div>
+      <p><label><i class="fa fa-calendar-check-o"></i> Trip Date</label></p>
+      <input class="w3-input w3-border" type="date" placeholder="DD MM YYYY" name="CheckIn" id="date" required>      
+      <p><label><i class="fa fa-male"></i> Trip Number</label></p>
+      <input class="w3-input w3-border" type="number" value="0" name="Adults" id="tripNumber">              
+      <p><label><i class="fa fa-child"></i> Airline</label></p>
+	  <select class="w3-input w3-border" type="text" value="AA" id="airlineSelect"></select>
+      <p><button onclick="call()" class="w3-button w3-block w3-green w3-left-align" type="submit"><i class="fa fa-search w3-margin-right"></i> Search</button></p>
+    </div>
+  </div>
+</nav>
 
-<div id = "label">Final Project</div><br>
-<canvas id="gl-canvas" width="512" height="512">
-    Sorry; your web browser doesn't support HTML5's canvas element.
-</canvas>
+<!-- Top menu on small screens -->
+<header class="w3-bar w3-top w3-hide-large w3-black w3-xlarge">
+  <span class="w3-bar-item">Trip</span>
+  <a href="javascript:void(0)" class="w3-right w3-bar-item w3-button" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main w3-white" style="margin-left:260px">
+
+  <!-- Push down content on small screens -->
+  <div class="w3-hide-large" style="margin-top:80px"></div>
+
+  <!-- Slideshow Header -->
+  <div class="w3-container" id="apartment">
+    <h2 class="w3-text-green">Trip Information</h2>
+  </div>
+
+  <div class="w3-container">
+    <p id="covidText">Press search to get flight data</p>
+    <hr>
+    
+    <h4><strong>From Info</strong></h4>
+    <p id="fromInfo" ></p>
+	
+	<hr>
+    
+    <h4><strong>To Info</strong></h4>
+    <p id="toInfo" ></p>
+  </div>
+  <hr>
+  
+<!-- End page content -->
+</div>
+
+<script>
+// Script to open and close sidebar when on tablets and phones
+function w3_open() {
+  document.getElementById("mySidebar").style.display = "block";
+  document.getElementById("myOverlay").style.display = "block";
+}
+ 
+function w3_close() {
+  document.getElementById("mySidebar").style.display = "none";
+  document.getElementById("myOverlay").style.display = "none";
+}
+
+function call(){
+	var TripNumber = document.getElementById('tripNumber').value;
+	var Airline = document.getElementById('airlineSelect').value;
+	var Date = document.getElementById('date').value;
+	
+	var Date = Date.substring(5, 7) + "%2F" + Date.substring(8, 10) + "%2F" + Date.substring(0, 4);
+
+
+	var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+		if(xmlHttp.responseText.length){
+			var text = xmlHttp.responseText.replace(new RegExp('/airlines', 'g') , "https://www.seatguru.com/airlines").replace("/browseairlines", "https://www.seatguru.com/browseairlines");
+			document.getElementById("covidText").innerHTML = text;
+			var fromTo = text.match(new RegExp('>... -> ...<', 'g'))[0];
+			
+			var from = fromTo.substring(1, 4);
+            var to = fromTo.substring(8, 11);
+			
+			displayData("fromInfo", from);
+			displayData("toInfo", to);
+		}
+    }
+    xmlHttp.open("GET", "https://cors-anywhere.herokuapp.com/https://seatguru.com/ajax/findseatmap.php?from=&to=&flightno=" 
+		+ TripNumber + "&carrier=" + Airline + "&date=" + Date, true);
+	xmlHttp.setRequestHeader("authorization", "Basic YW0tYmFjYXJhaTo0NWY5ZDYtYTUzYTdhLTEwYzY4ZS0wMWI2NDYtYjNjM2M2");
+    xmlHttp.send(null);
+}
+
+function displayData(element, airport){
+	document.getElementById(element).innerHTML = airport;
+	
+	var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+		if(xmlHttp.responseText.length){
+			var data = JSON.parse(xmlHttp.responseText).data.covid_info.current;
+		
+			document.getElementById(element).innerHTML = "Airport: " + airport + 
+				"\nConfirmed Cases: " + data.confirmed +
+				"\nDeaths: " + data.deaths +
+				"\nRecovered: " + data.recovered +
+				"\nActive: " + data.active;
+		}
+    }
+    xmlHttp.open("GET", "https://smartcheck.travel/api/v1/airport?code=" + airport + "&historic=false", true);
+	xmlHttp.setRequestHeader("authorization", "Basic YW0tYmFjYXJhaTo0NWY5ZDYtYTUzYTdhLTEwYzY4ZS0wMWI2NDYtYjNjM2M2");
+    xmlHttp.send(null);
+}
+
+function loadAirports(){
+	var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+		if(xmlHttp.responseText.length){
+		text = xmlHttp.responseText.replace("jQuery17208347935779457019_1589643247566(", "").replace(");", "");
+		
+		var airlines = JSON.parse(text);
+		var airHTML = "";
+		
+		var options = airlines.map(a => {
+			let opt = document.createElement('option');
+			opt.textContent = a.name;
+			opt.value = a.value;
+			return opt;
+		});
+		
+		airlineSelect.append(...options);
+		}
+    }
+    xmlHttp.open("GET", "https://cors-anywhere.herokuapp.com/https://seatguru.com/app/airlines?callback=jQuery17208347935779457019_1589643247566&query=&limit=10000&uniqueID=1589643247999&_=1589643248004", true);
+	xmlHttp.setRequestHeader("authorization", "Basic YW0tYmFjYXJhaTo0NWY5ZDYtYTUzYTdhLTEwYzY4ZS0wMWI2NDYtYjNjM2M2");
+    xmlHttp.send(null);
+}
+</script>
+
 </body>
 </html>
+
+
+
