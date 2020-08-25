@@ -136,7 +136,6 @@ function loadAirports(){
 		text = xmlHttp.responseText.replace("jQuery17208347935779457019_1589643247566(", "").replace(");", "");
 		
 		var airlines = JSON.parse(text);
-		var airHTML = "";
 		
 		var options = airlines.map(a => {
 			let opt = document.createElement('option');
