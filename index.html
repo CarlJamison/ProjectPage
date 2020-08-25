@@ -21,9 +21,9 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", Arial, Helvetica, sans-serif}
     <hr>
     <div>
       <p><label><i class="fa fa-calendar-check-o"></i> Trip Date</label></p>
-      <input class="w3-input w3-border" type="date" placeholder="DD MM YYYY" name="CheckIn" id="date" required>      
+      <input class="w3-input w3-border" type="date" value="2020-10-8" placeholder="DD MM YYYY" name="CheckIn" id="date" required>      
       <p><label><i class="fa fa-male"></i> Trip Number</label></p>
-      <input class="w3-input w3-border" type="number" value="0" name="Adults" id="tripNumber">              
+      <input class="w3-input w3-border" type="number" value="2407" name="Adults" id="tripNumber">              
       <p><label><i class="fa fa-child"></i> Airline</label></p>
 	  <select class="w3-input w3-border" type="text" value="AA" id="airlineSelect"></select>
       <p><button onclick="call()" class="w3-button w3-block w3-green w3-left-align" type="submit"><i class="fa fa-search w3-margin-right"></i> Search</button></p>
@@ -117,10 +117,10 @@ function displayData(element, airport){
 			var data = JSON.parse(xmlHttp.responseText).data.covid_info.current;
 		
 			document.getElementById(element).innerHTML = "Airport: " + airport + 
-				"\nConfirmed Cases: " + data.confirmed +
-				"\nDeaths: " + data.deaths +
-				"\nRecovered: " + data.recovered +
-				"\nActive: " + data.active;
+				"<br>Confirmed Cases: " + data.confirmed +
+				"<br>Deaths: " + data.deaths +
+				"<br>Recovered: " + data.recovered +
+				"<br>Active: " + data.active;
 		}
     }
     xmlHttp.open("GET", "https://smartcheck.travel/api/v1/airport?code=" + airport + "&historic=false", true);
@@ -145,6 +145,9 @@ function loadAirports(){
 		});
 		
 		airlineSelect.append(...options);
+		
+		airlineSelect.value = "AA";
+		date.defaultValue = "2020-10-08"
 		}
     }
     xmlHttp.open("GET", "https://cors-anywhere.herokuapp.com/https://seatguru.com/app/airlines?callback=jQuery17208347935779457019_1589643247566&query=&limit=10000&uniqueID=1589643247999&_=1589643248004", true);
